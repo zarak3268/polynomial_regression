@@ -26,16 +26,23 @@ def grad_descent(a, ms, xs, ys, train_size, tolerance):
     return ms
 
 def Main():
+    np.seterr(all='raise')
     base_xs = np.array([[1, 2, 3, 4, 5]])
     ones = np.ones(base_xs[0].size)
     xs = np.row_stack((ones, base_xs))
     ys = np.array([3.6, 4.8, 6.6, 9, 11.8])
     train_size = np.size(ys)
     ms = np.array([[0.5], [0.6]])
-    a = 0.01
+    a = 1
     tolerance = 0.001
-
-    ms = grad_descent(a, ms, xs, ys, train_size, tolerance)
+    float_error = True
+    
+    while float_error:
+        try:
+            ms = grad_descent(a, ms, xs, ys, train_size, tolerance)
+            float_error = False
+        except FloatingPointError:
+            a = a/10
     
     print(ms)
     plt.plot(row_sum(base_xs), ys, 'ro')
