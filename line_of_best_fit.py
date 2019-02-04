@@ -27,12 +27,13 @@ def grad_descent(a, ms, xs, ys, train_size, tolerance):
 
 def Main():
     np.seterr(all='raise')
+    #Change base_xs and ys for new data
     base_xs = np.array([[1, 2, 3, 4, 5]])
     ones = np.ones(base_xs[0].size)
     xs = np.row_stack((ones, base_xs))
     ys = np.array([3.6, 4.8, 6.6, 9, 11.8])
     train_size = np.size(ys)
-    ms = np.array([[0.5], [0.6]])
+    ms = np.ones((len(xs),1))
     a = 1
     tolerance = 0.001
     float_error = True
