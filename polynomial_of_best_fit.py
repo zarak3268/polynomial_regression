@@ -11,17 +11,23 @@ class PolyOfBestFit:
 
     #Returns a 2d numpy array, where each row is a power of xs ie
     #[[1, 2, 3], [1, 4, 9]] etc. depending on the order 
-    def _poly(self, order, xs):
+    def poly(self, order, xs):
         poly_xs = np.ones(xs[0].size)
         for power in range(order):
             poly_xs = np.row_stack((poly_xs, xs**(power+1)))
         return poly_xs
 
+    def set_xs(self, xs):
+        self.xs = xs
+
+    def set_ys(self, ys):
+        self.ys = ys
+
     #Estimates coefficients for training set ie m0 + m1*x1 + m2*x2**2
     def estimate_ms(self, order, tolerance):
         np.seterr(all='raise')
         a = 1
-        poly_xs = self._poly(order, self.xs)
+        poly_xs = self.poly(order, self.xs)
         train_size = np.size(self.ys)
         ms = np.ones((len(poly_xs),1))
         float_error = True
@@ -64,17 +70,18 @@ def Main():
     ys = np.array([0.5, 1.735, -1, 0.75, 4])
     order = 3
     tolerance = 0.01
-    poly = PolyOfBestFit(xs, ys)
-    ms = poly.estimate_ms(order, tolerance)
+    poly_best_fit = PolyOfBestFit(xs, ys)
+    ms = poly_best_fit.estimate_ms(order, tolerance)
     print('Coefficients of x from lowest to highest power: ')
     print(ms)
     #Change new_xs as appropriate for plot. Observe if fit generalizes well to new dataset (new_xs)
     new_xs = np.array([np.linspace(-3, 2, 100)])
-    new_xs_powered = np.ones(new_xs[0].size)
-    for power in range(order):
-        new_xs_powered = np.row_stack((new_xs_powered, new_xs**(power+1)))
-    plt.plot(poly.row_sum(xs), ys, 'ro')
-    plt.plot(poly.row_sum(new_xs), poly.row_sum(new_xs_powered*ms))
+    new_xs_poly = poly_best_fit.poly(order, new_xs)
+    plt.plot(poly_best_fit.row_sum(xs), ys, 'ro')
+    plt.plot(
+        poly_best_fit.row_sum(new_xs),
+        poly_best_fit.row_sum(new_xs_poly*ms)
+        )
     plt.show()
 
 if __name__ == '__main__':
