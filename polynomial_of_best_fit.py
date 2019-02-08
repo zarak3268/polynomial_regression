@@ -23,7 +23,7 @@ class PolyOfBestFit:
     def set_ys(self, ys):
         self.ys = ys
 
-    #Estimates coefficients for training set ie m0 + m1*x1 + m2*x2**2
+    #Estimates coefficients for training set ie m0 + m1*x + m2*x**2
     def estimate_ms(self, order, tolerance):
         np.seterr(all='raise')
         a = 1
